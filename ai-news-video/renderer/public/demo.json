@@ -1,0 +1,261 @@
+{
+  "extract": {
+    "title": "🚨 美国首次强制下架Anthropic Fable 5！SpaceX 750亿IPO转型AI算力，Bezos物理AI获120亿融资",
+    "coverTitle": "今日 AI 资讯概览",
+    "date": "2026-06-14",
+    "overview": [
+      "政府强制关停 Fable 5",
+      "SpaceX 完成史上最大 IPO",
+      "Prometheus 融资 120 亿",
+      "多州检察长调查 OpenAI",
+      "MiniMax M3 百万 token 加速"
+    ],
+    "keypoints": [
+      {
+        "sourceTitle": "美国政府强制关停 Fable 5 与 Mythos 5",
+        "elements": [
+          {
+            "icon": "Gavel",
+            "subtitle": "政府指令",
+            "brief": "美国商务部6月12日向 CEO Dario Amodei 发出指令，援引国家安全理由，要求禁止外国公民使用 Anthropic 最强模型。"
+          },
+          {
+            "icon": "ShieldAlert",
+            "subtitle": "紧急下架",
+            "brief": "Fable 5 与 Mythos 5 仅上线3天（6月9日发布）即被迫全球停用，因无法实时区分用户国籍，其他 Claude 模型不受影响。"
+          },
+          {
+            "icon": "Lock",
+            "subtitle": "越狱触发",
+            "brief": "政府获悉存在针对 Fable 5 的越狱方法；Anthropic 称风险狭窄，GPT-5.5 等模型亦有类似能力。"
+          },
+          {
+            "icon": "Flag",
+            "subtitle": "历史先例",
+            "brief": "这是首次政府强制下架已公开部署的前沿 AI 模型，引发全球 AI 安全与出口管制新争论。"
+          },
+          {
+            "icon": "Scale",
+            "subtitle": "法律背景",
+            "brief": "事件发生在 Anthropic 与五角大楼法律纠纷的背景下，AI 出口管制进入全新监管阶段。"
+          }
+        ]
+      },
+      {
+        "sourceTitle": "SpaceX 750亿IPO，转型 AI 算力巨头",
+        "elements": [
+          {
+            "icon": "TrendingUp",
+            "subtitle": "上市规模",
+            "brief": "SpaceX 以每股135美元完成750亿美元 IPO，开盘涨至150美元，马斯克成为全球首位万亿富豪。"
+          },
+          {
+            "icon": "Cpu",
+            "subtitle": "算力租赁",
+            "brief": "与 Anthropic 签署年约150亿美元算力租赁协议（至2029年5月），与 Google 签署每月9.2亿美元 GPU 租赁合同。"
+          },
+          {
+            "icon": "Database",
+            "subtitle": "Colossus 转租",
+            "brief": "因 Grok 训练延迟，SpaceX 将 Colossus 数据中心容量转租给 Anthropic 与 Google，两项合同年化收入约260亿美元。"
+          },
+          {
+            "icon": "AlertTriangle",
+            "subtitle": "合同风险",
+            "brief": "两项算力租赁合同均含90天解约条款，SpaceX 作为 AI 基础设施巨头的稳定性仍存疑。"
+          },
+          {
+            "icon": "Factory",
+            "subtitle": "转型叙事",
+            "brief": "SpaceX 从火箭公司转型为 AI 基础设施巨头，AI 算力租赁成为 IPO 路演的核心商业卖点。"
+          }
+        ]
+      },
+      {
+        "sourceTitle": "Bezos 旗下 Prometheus 融资 120 亿",
+        "elements": [
+          {
+            "icon": "DollarSign",
+            "subtitle": "融资规模",
+            "brief": "Prometheus 完成120亿美元 B 轮融资，估值达410亿美元，由 JPMorgan、Goldman Sachs、BlackRock 等参投。"
+          },
+          {
+            "icon": "Rocket",
+            "subtitle": "目标愿景",
+            "brief": "Prometheus 目标打造「人工通用工程师」，聚焦航空航天、半导体、药物发现等复杂物理系统的设计与制造自动化。"
+          },
+          {
+            "icon": "Brain",
+            "subtitle": "团队背景",
+            "brief": "由 Jeff Bezos 与前 Google Verily 联合创始人 Vik Bajaj 共同创立，公司约150人，Bezos 称其占据大部分时间。"
+          },
+          {
+            "icon": "TrendingUp",
+            "subtitle": "赛道转向",
+            "brief": "这是物理 AI 赛道史上最大单笔押注之一，标志资本从纯软件 LLM 转向实体工程自动化方向。"
+          }
+        ]
+      },
+      {
+        "sourceTitle": "多州检察长联合调查 OpenAI",
+        "elements": [
+          {
+            "icon": "Gavel",
+            "subtitle": "联合传票",
+            "brief": "以纽约州为首的检察长联盟6月12日向 OpenAI 发出广泛传票，调查用户安全、数据处理与未成年人保护。"
+          },
+          {
+            "icon": "Users",
+            "subtitle": "重点对象",
+            "brief": "调查重点关注未成年人与老年人使用情况，以及广告、用户留存、模型谄媚与健康数据等内部文件。"
+          },
+          {
+            "icon": "Briefcase",
+            "subtitle": "IPO 冲击",
+            "brief": "OpenAI 正秘密提交 IPO 申请，此次多州联合调查或对上市进程构成重大影响。"
+          },
+          {
+            "icon": "Scale",
+            "subtitle": "监管趋势",
+            "brief": "佛罗里达州此前已就 ChatGPT 安全问题起诉，OpenAI 现面临上市前最严峻的合规审查之一。"
+          }
+        ]
+      },
+      {
+        "sourceTitle": "MiniMax M3 百万 token 推理加速 14 倍",
+        "elements": [
+          {
+            "icon": "Zap",
+            "subtitle": "推理加速",
+            "brief": "MiniMax 发布 MSA 机制，在100万 token 上下文下预填充加速14.2倍、解码加速7.6倍（H800 GPU）。"
+          },
+          {
+            "icon": "Brain",
+            "subtitle": "模型规模",
+            "brief": "MiniMax-M3 是1090亿参数 MoE 模型，生产级多模态，已完整开源发布。"
+          },
+          {
+            "icon": "BarChart3",
+            "subtitle": "计算效率",
+            "brief": "性能与标准 GQA 注意力持平，但计算量降低28.4倍，使百万 token 级 AI 代理部署经济上真正可行。"
+          },
+          {
+            "icon": "Globe",
+            "subtitle": "行业影响",
+            "brief": "长上下文竞争进入新阶段，百万 token 推理从「技术可行」变为「成本可控」，将加速 AI 代理规模化落地。"
+          }
+        ]
+      }
+    ]
+  },
+  "timeline": {
+    "theme": "linen",
+    "totalSec": 129.96,
+    "slides": [
+      {
+        "id": "cover",
+        "durSec": 11.196
+      },
+      {
+        "id": "kp-0",
+        "durSec": 21.456
+      },
+      {
+        "id": "kp-1",
+        "durSec": 24.156
+      },
+      {
+        "id": "kp-2",
+        "durSec": 28.979999999999997
+      },
+      {
+        "id": "kp-3",
+        "durSec": 20.664
+      },
+      {
+        "id": "kp-4",
+        "durSec": 23.508
+      }
+    ],
+    "cues": [
+      {
+        "slideId": "cover",
+        "sentenceIndex": 0,
+        "startSec": 0,
+        "durSec": 5.652
+      },
+      {
+        "slideId": "cover",
+        "sentenceIndex": 1,
+        "startSec": 5.652,
+        "durSec": 5.544
+      },
+      {
+        "slideId": "kp-0",
+        "sentenceIndex": 2,
+        "startSec": 11.196,
+        "durSec": 10.008
+      },
+      {
+        "slideId": "kp-0",
+        "sentenceIndex": 3,
+        "startSec": 21.204,
+        "durSec": 11.448
+      },
+      {
+        "slideId": "kp-1",
+        "sentenceIndex": 4,
+        "startSec": 32.652,
+        "durSec": 12.456
+      },
+      {
+        "slideId": "kp-1",
+        "sentenceIndex": 5,
+        "startSec": 45.108000000000004,
+        "durSec": 11.7
+      },
+      {
+        "slideId": "kp-2",
+        "sentenceIndex": 6,
+        "startSec": 56.80800000000001,
+        "durSec": 9
+      },
+      {
+        "slideId": "kp-2",
+        "sentenceIndex": 7,
+        "startSec": 65.808,
+        "durSec": 10.296
+      },
+      {
+        "slideId": "kp-2",
+        "sentenceIndex": 8,
+        "startSec": 76.10400000000001,
+        "durSec": 9.684
+      },
+      {
+        "slideId": "kp-3",
+        "sentenceIndex": 9,
+        "startSec": 85.78800000000001,
+        "durSec": 11.304
+      },
+      {
+        "slideId": "kp-3",
+        "sentenceIndex": 10,
+        "startSec": 97.09200000000001,
+        "durSec": 9.36
+      },
+      {
+        "slideId": "kp-4",
+        "sentenceIndex": 11,
+        "startSec": 106.45200000000001,
+        "durSec": 10.872
+      },
+      {
+        "slideId": "kp-4",
+        "sentenceIndex": 12,
+        "startSec": 117.32400000000001,
+        "durSec": 12.636
+      }
+    ]
+  }
+}

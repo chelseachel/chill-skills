@@ -1,0 +1,247 @@
+/* Shared keyframes referenced by theme animation.enter / animation.exit. */
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 16px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes fadeOut {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+@keyframes blockSlide {
+  from {
+    opacity: 0;
+    transform: translateX(-32px);
+    box-shadow: 0 0 0 #0a0a0a;
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+    box-shadow: var(--shadow-card);
+  }
+}
+
+@keyframes blockSlideOut {
+  from { opacity: 1; transform: translateX(0); }
+  to   { opacity: 0; transform: translateX(32px); }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes scaleOut {
+  from { opacity: 1; transform: scale(1); }
+  to   { opacity: 0; transform: scale(1.02); }
+}
+
+@keyframes iconPop {
+  from { opacity: 0; transform: scale(0.8); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+@keyframes accentSweep {
+  from { transform: scaleX(0); }
+  to   { transform: scaleX(1); }
+}
+
+@keyframes glowPulse {
+  from { opacity: 0.55; transform: scale(1); }
+  to   { opacity: 1;    transform: scale(1.06); }
+}
+
+@keyframes glowFlare {
+  0%   { filter: drop-shadow(0 0 0 rgba(124,58,237,0)); }
+  50%  { filter: drop-shadow(0 0 24px rgba(124,58,237,0.65)); }
+  100% { filter: drop-shadow(0 0 0 rgba(124,58,237,0)); }
+}
+
+/* Linen: a longer travel + slight settle, no scale, no blur — feels like a sheet of paper laid down. */
+@keyframes liftIn {
+  from {
+    opacity: 0;
+    transform: translateY(28px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes liftOut {
+  from { opacity: 1; transform: translateY(0); }
+  to   { opacity: 0; transform: translateY(-12px); }
+}
+
+/* Hairline draws in from the left — used as a section rule under titles. */
+@keyframes ruleDraw {
+  from { transform: scaleX(0); }
+  to   { transform: scaleX(1); }
+}
+
+/* Slide stage layout — shared across themes. */
+.slide-stage {
+  position: relative;
+  width: 1920px;
+  height: 1080px;
+  overflow: hidden;
+}
+
+/* Continuously-advancing progress bar — lives at stage level, painted over all
+ * slides. Driven each frame from wall-clock by Player.tsx, so no CSS transition
+ * (a transition would only make the fill lag behind reality). */
+.progress-wrap {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 10;
+  pointer-events: none;
+}
+
+.progress-chapters {
+  position: relative;
+  width: 100%;
+  height: 42px;
+  overflow: hidden;
+  background: color-mix(in srgb, var(--color-outline-variant) 38%, var(--color-background));
+}
+
+/* .progress-chapters::before {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: var(--progress-pct, 0%);
+  background-image: linear-gradient(
+    to top,
+    color-mix(in srgb, #3f38b0 32%, transparent) 0,
+    color-mix(in srgb, #3f38b0 32%, transparent) 100%
+  );
+  pointer-events: none;
+} */
+
+.progress-chapter {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  box-sizing: border-box;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0;
+  color: var(--color-on-surface-variant);
+  font-family: var(--font-body-md-family), 'PingFang SC', sans-serif;
+  font-size: 20px;
+  line-height: 1;
+  overflow: hidden;
+}
+
+.progress-chapter.active {
+  color: var(--color-on-surface-variant);
+}
+
+.progress-chapter:last-child {
+  border-right: 0;
+}
+
+.progress-chapter__title {
+  position: relative;
+  z-index: 1;
+  min-width: 0;
+  padding-left: 12px;
+  padding-right: 12px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.progress {
+  position: relative;
+  height: 6px;
+  background: var(--color-outline-variant);
+  overflow: hidden;
+}
+
+.progress__fill {
+  height: 100%;
+  background: var(--color-primary);
+  transform-origin: left center;
+}
+
+/* Chapter markers between slides — painted on top of both track and fill so
+ * they read as a "cut" through the bar at each slide boundary. */
+.progress__tick {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background: var(--color-surface);
+  transform: translateX(-1.5px);
+  pointer-events: none;
+  z-index: 2;
+}
+
+.slide {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  pointer-events: none;
+  display: flex;
+  width: 100%;
+  height: 100%;
+  padding-bottom: var(--stage-safe-bottom);
+}
+
+.slide.active {
+  opacity: 1;
+  pointer-events: auto;
+  /* animation: var(--anim-enter) var(--anim-duration) var(--anim-easing) both; */
+  animation: none;
+}
+
+.slide.exiting {
+  /* animation: var(--anim-exit) var(--anim-exit-duration) var(--anim-easing) both; */
+  animation: none;
+}
+
+/* Stagger helpers — children opt-in via data-stagger="<idx>". */
+.slide.active [data-stagger] {
+  opacity: 0;
+  animation: var(--anim-enter) var(--anim-duration) var(--anim-easing) both;
+  animation-delay: calc(var(--anim-stagger) * attr(data-stagger number, 0));
+}
+/* attr() for non-string is poorly supported; provide explicit selectors. */
+.slide.active [data-stagger="0"] { animation-delay: 0ms; }
+.slide.active [data-stagger="1"] { animation-delay: var(--anim-stagger); }
+.slide.active [data-stagger="2"] { animation-delay: calc(var(--anim-stagger) * 2); }
+.slide.active [data-stagger="3"] { animation-delay: calc(var(--anim-stagger) * 3); }
+.slide.active [data-stagger="4"] { animation-delay: calc(var(--anim-stagger) * 4); }
+.slide.active [data-stagger="5"] { animation-delay: calc(var(--anim-stagger) * 5); }
+.slide.active [data-stagger="6"] { animation-delay: calc(var(--anim-stagger) * 6); }
+.slide.active [data-stagger="7"] { animation-delay: calc(var(--anim-stagger) * 7); }
+.slide.active [data-stagger="8"] { animation-delay: calc(var(--anim-stagger) * 8); }
+.slide.active [data-stagger="9"] { animation-delay: calc(var(--anim-stagger) * 9); }
+.slide.active [data-stagger="10"] { animation-delay: calc(var(--anim-stagger) * 10); }
+.slide.active [data-stagger="11"] { animation-delay: calc(var(--anim-stagger) * 11); }
+.slide.active [data-stagger="12"] { animation-delay: calc(var(--anim-stagger) * 12); }

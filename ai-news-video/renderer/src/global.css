@@ -1,0 +1,39 @@
+html, body {
+  width: 100vw;
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #000;
+}
+
+#app {
+  /* Fixed design canvas — always 1920×1080 in logical pixels */
+  width: 1920px;
+  height: 1080px;
+  flex: 0 0 auto;
+  overflow: hidden;
+  transform-origin: center center;
+  /* --scale is set by JS; defaults to 1 so Playwright at 1920×1080 is unaffected */
+  transform: scale(var(--scale, 1));
+}
+
+* { box-sizing: border-box; }
+
+:root {
+  /* Bottom safe area reserved for the chapter/progress bar (42px chapters + 6px
+   * bar ≈ 48px, rounded up for breathing room). Slide content roots add this to
+   * their bottom padding so content clears the bar — the template predates it. */
+  --stage-safe-bottom: 50px;
+}
+
+body {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+img, svg { display: block; }

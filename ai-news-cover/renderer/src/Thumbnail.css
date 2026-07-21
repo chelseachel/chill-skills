@@ -1,0 +1,160 @@
+.cover {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background: var(--color-background);
+  color: var(--color-on-surface);
+  padding: var(--space-page);
+  display: flex;
+  flex-direction: column;
+}
+
+/* Editorial spine: a slim accent rule down the left edge gives the frame
+   structure and a brand-colour anchor without adding any text. */
+.cover__spine {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 14px;
+  height: 100%;
+  background: var(--cover-accent);
+}
+
+/* ───────── Top bar: channel brand + date ───────── */
+
+.cover__top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: var(--space-md);
+  border-bottom: 1px solid var(--color-outline-variant);
+}
+
+/* "千千" carries the single accent voice; "日报" stays ink. Big enough to
+   survive being shrunk in the app feed, but clearly secondary to the hook. */
+.cover__brand {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  font-size: 40px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: var(--color-on-surface);
+}
+
+.cover__brand-mark {
+  color: var(--cover-accent);
+}
+
+.cover__brand-en {
+  font-size: 36px;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  color: var(--color-outline);
+}
+
+/* render the "·" separator before the English mark */
+.cover__brand-en::before {
+  content: '· ';
+}
+
+.cover__date {
+  font-size: 40px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--color-on-surface-variant);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ───────── Body: category flag + hero headline ───────── */
+
+.cover__body {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  /* Headline sits slightly above centre; the deliberate breathing room below it
+     reads as intentional negative space rather than a gap left by a missing
+     element. */
+  justify-content: center;
+  padding-bottom: var(--space-xxl);
+  align-items: flex-start;
+}
+
+.cover__hook {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.cover__hook-text {
+  font-size: var(--font-hook-size); /* overridden inline by the auto-fit */
+  font-weight: var(--font-hook-weight);
+  line-height: var(--font-hook-line-height);
+  letter-spacing: var(--font-hook-letter-spacing);
+  color: var(--color-on-surface);
+  word-break: break-word;
+}
+
+/* One keyword in the headline — a highlighter-marker swipe behind ink text.
+   The focal keyword carries the single accent, so the standalone underline is
+   dropped whenever a keyword is present (see the fallback rule below). */
+.cover__hook-hl {
+  color: var(--color-on-surface);
+  background-image: linear-gradient(
+    to top,
+    color-mix(in srgb, var(--cover-accent) 32%, transparent) 0,
+    color-mix(in srgb, var(--cover-accent) 32%, transparent) 56%,
+    transparent 56%
+  );
+  padding-inline: 0.06em;
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+}
+
+/* Fallback accent stroke when the hook has no highlight keyword. */
+.cover__hook-rule {
+  display: block;
+  width: 260px;
+  height: 18px;
+  margin-top: var(--space-xl);
+  background: var(--cover-accent);
+  border-radius: var(--radius-full);
+}
+
+/* ───────── Bottom: graphical story-count motif ───────── */
+
+.cover__bottom {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: var(--space-xl);
+  padding-top: var(--space-lg);
+  border-top: 1px solid var(--color-outline-variant);
+}
+
+/* One square per story — conveys "how many" as rhythm, not as tiny text. */
+.cover__dots {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.cover__dot {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  background: var(--cover-accent);
+}
+
+/* Story count as a filled-accent pill, anchored to the bottom-right corner —
+   it and the bottom-left squares bookend the footer. */
+.cover__count {
+  padding: 16px 38px;
+  background: var(--cover-accent);
+  color: var(--color-on-primary);
+  border-radius: var(--radius-full);
+  font-size: 48px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+}

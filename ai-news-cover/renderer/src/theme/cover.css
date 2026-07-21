@@ -1,0 +1,80 @@
+/*
+ * Cover theme — a self-contained "Linen thumbnail" design system.
+ *
+ * Visual DNA is borrowed from the ai-news-video `linen` theme (warm linen
+ * canvas, cool slate ink, single deep-indigo accent, Schibsted Grotesk,
+ * hairline grouping, zero shadow). It is intentionally a STANDALONE copy:
+ * the cover lives on video sites next to other thumbnails, so it does not
+ * need to track the video theme — episodes only need to be consistent with
+ * each other. Edit freely; nothing downstream depends on these values.
+ *
+ * Thumbnail-specific deviation from linen: the display title is dialled up
+ * (size + weight) and one accent anchor (the "今日 N 条" badge) is allowed,
+ * because a thumbnail is viewed small and must survive being shrunk.
+ */
+@import url('https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@400;500;700;900&display=swap');
+
+:root {
+  /* ── Linen & Ink palette ── */
+  --color-surface: #f7f2e8;
+  --color-surface-bright: #fbf8f1;
+  --color-surface-container: #ede7d3;
+  --color-on-surface: #1a1b26;
+  --color-on-surface-variant: #5b5d6e;
+  --color-outline: #b8ae9a;
+  --color-outline-variant: #e0d7c4;
+  --color-primary: #3f38b0;
+  --color-on-primary: #ffffff;
+  --color-background: #f7f2e8;
+  --color-on-background: #1a1b26;
+
+  /* The single accent voice. Swap this one value to re-tint a whole episode. */
+  --cover-accent: var(--color-primary);
+
+  /* ── Typography (Schibsted Grotesk, CJK falls back to PingFang SC) ── */
+  --font-family: 'Schibsted Grotesk', 'PingFang SC', 'Source Han Sans SC', sans-serif;
+
+  /* Display dialled past linen's 112px — a static single frame can shout. */
+  --font-hook-size: 176px;
+  --font-hook-weight: 900;
+  --font-hook-line-height: 1.1;
+  --font-hook-letter-spacing: -0.04em;
+
+  --font-h2-size: 42px;
+  --font-h2-weight: 700;
+
+  --font-body-lg-size: 34px;
+  --font-body-lg-weight: 400;
+  --font-body-lg-line-height: 1.45;
+
+  --font-label-caps-size: 22px;
+  --font-label-caps-weight: 700;
+  --font-label-caps-letter-spacing: 0.18em;
+
+  --font-date-size: 60px;
+  --font-wordmark-size: 132px;
+  --font-badge-size: 30px;
+
+  /* ── Spacing & shape ── */
+  --space-sm: 8px;
+  --space-md: 20px;
+  --space-lg: 32px;
+  --space-xl: 56px;
+  --space-xxl: 88px;
+  --space-page: 120px;
+  --radius-full: 9999px;
+}
+
+body {
+  background: var(--color-background);
+  color: var(--color-on-background);
+  font-family: var(--font-family);
+}
+
+.label-caps {
+  font-size: var(--font-label-caps-size);
+  font-weight: var(--font-label-caps-weight);
+  letter-spacing: var(--font-label-caps-letter-spacing);
+  text-transform: uppercase;
+  font-variant-numeric: tabular-nums;
+}

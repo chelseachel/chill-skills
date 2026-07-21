@@ -1,0 +1,299 @@
+.kp {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background: var(--color-background);
+  color: var(--color-on-background);
+  padding: var(--space-page);
+  display: flex;
+  align-items: stretch;
+}
+
+.kp__bg {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.kp__inner {
+  position: relative;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  /* No justify-content — header pinned to top so its Y is identical across slides */
+  gap: var(--space-xl);
+}
+
+/* ─── header ─── */
+
+.kp__header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.kp__meta {
+  font-family: var(--font-label-caps-family), monospace;
+  font-size: var(--font-label-caps-size);
+  font-weight: var(--font-label-caps-weight);
+  letter-spacing: var(--font-label-caps-letter-spacing);
+  color: var(--color-on-surface-variant);
+  text-transform: uppercase;
+  align-self: flex-start;
+}
+
+.kp__title {
+  margin: 0;
+  font-family: var(--font-h2-family), 'PingFang SC', sans-serif;
+  font-size: var(--font-h2-size);
+  font-weight: var(--font-h2-weight);
+  line-height: var(--font-h2-line-height);
+  letter-spacing: var(--font-h2-letter-spacing);
+  color: var(--color-on-surface);
+  max-width: 1700px;
+}
+
+/* ─── elements grid ─── */
+
+.kp__elements {
+  flex: 1 1 auto;            /* fill space below header */
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: var(--space-xl);
+  align-content: center; 
+}
+
+.kp__elements[data-cols="1"] { grid-template-columns: minmax(0, 1fr); }
+.kp__elements[data-cols="2"] { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.kp__elements[data-cols="3"] { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.kp__elements[data-cols="4"] { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+
+.kp__element {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-md);
+  padding: var(--space-lg);
+  background: var(--color-surface-container);
+  border: 1px solid var(--color-outline-variant);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-card);
+  min-width: 0;
+}
+
+.kp__element-icon {
+  flex: 0 0 auto;
+  width: 80px;
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+  border-radius: var(--radius-md);
+}
+
+/* ─── icon accent cycling: primary → tertiary → secondary ─── */
+.kp__element:nth-child(3n+2) .kp__element-icon {
+  background: var(--color-tertiary);
+  color: var(--color-on-tertiary);
+}
+.kp__element:nth-child(3n+3) .kp__element-icon {
+  background: var(--color-secondary);
+  color: var(--color-on-secondary);
+}
+
+.kp__element-body {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  min-width: 0;
+}
+
+.kp__element-subtitle {
+  font-family: var(--font-h2-family), 'PingFang SC', sans-serif;
+  font-size: var(--font-h2-size);
+  font-weight: var(--font-h2-weight);
+  line-height: var(--font-h2-line-height);
+  letter-spacing: var(--font-h2-letter-spacing);
+  color: var(--color-on-surface);
+}
+
+.kp__element-brief {
+  font-family: var(--font-body-md-family), 'PingFang SC', sans-serif;
+  font-size: var(--font-body-md-size);
+  font-weight: var(--font-body-md-weight);
+  line-height: var(--font-body-md-line-height);
+  letter-spacing: var(--font-body-md-letter-spacing);
+  color: var(--color-on-surface-variant);
+}
+
+/* ─── progress bar lives on .slide-stage, not per-slide — see animations.css ─── */
+
+/* ───── Linen: hairline structure, no element boxes, single-voice icons ───── */
+
+:root[data-theme="linen"] .kp__inner {
+  gap: var(--space-xl);
+  padding-bottom: var(--space-sm);
+}
+
+:root[data-theme="linen"] .kp__header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+  padding-bottom: var(--space-md);
+}
+
+:root[data-theme="linen"] .kp__meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  color: var(--color-on-surface-variant);
+  font-variant-numeric: tabular-nums;
+}
+
+:root[data-theme="linen"] .kp__meta::after {
+  content: "TODAY";
+  font: inherit;
+  letter-spacing: var(--font-label-caps-letter-spacing);
+}
+
+:root[data-theme="linen"] .kp__title {
+  position: relative;
+  padding-bottom: var(--space-lg);
+  font-family: var(--font-h1-family), 'PingFang SC', sans-serif;
+  font-size: var(--font-h1-size);
+  font-weight: var(--font-h1-weight);
+  line-height: var(--font-h1-line-height);
+  letter-spacing: var(--font-h1-letter-spacing);
+  color: var(--color-on-surface);
+}
+
+:root[data-theme="linen"] .kp__title::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 1px;
+  background: var(--color-outline-variant);
+  transform: scaleX(0);
+  transform-origin: left center;
+}
+
+:root[data-theme="linen"] .slide.active .kp__title::after {
+  animation: ruleDraw 640ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation-delay: calc(var(--anim-stagger) * 2 + 160ms);
+}
+
+:root[data-theme="linen"] .kp__elements {
+  gap: var(--space-xl) var(--space-xxl);
+}
+
+/* >6 elements: shrink the font size */
+:root[data-theme="linen"] .kp__elements[data-cols="4"] {
+  --font-body-md-size: 24px;
+  --font-body-md-line-height: 36px;
+}
+
+:root[data-theme="linen"] .kp__element {
+  flex-direction: column;
+  align-items: flex-start;
+  gap: calc(var(--space-sm) * 2);
+  padding: 0;
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+:root[data-theme="linen"] .kp__element-icon {
+  width: auto;
+  height: auto;
+  background: transparent;
+  color: var(--color-primary);
+  border-radius: 0;
+  margin-left: -0.1em;
+  padding: 0;
+}
+
+:root[data-theme="linen"] .kp__element-icon > svg {
+  width: 60px;
+  height: 60px;
+  stroke-width: 1.5;
+}
+
+/* Lock The One Voice Rule on element icons. */
+:root[data-theme="linen"] .kp__element:nth-child(3n+2) .kp__element-icon,
+:root[data-theme="linen"] .kp__element:nth-child(3n+3) .kp__element-icon {
+  background: transparent;
+  color: var(--color-primary);
+}
+
+:root[data-theme="linen"] .kp__element-body {
+  gap: var(--space-sm);
+}
+
+:root[data-theme="linen"] .kp__element-subtitle {
+  font-family: var(--font-h2-family), 'PingFang SC', sans-serif;
+  font-size: var(--font-h2-size);
+  font-weight: var(--font-h2-weight);
+  line-height: var(--font-h2-line-height);
+  letter-spacing: var(--font-h2-letter-spacing);
+  color: var(--color-on-surface);
+}
+
+:root[data-theme="linen"] .kp__element-brief {
+  color: var(--color-on-surface-variant);
+}
+
+:root[data-theme="linen"] .progress {
+  /* height: 4px; */
+  background: var(--color-outline-variant);
+}
+
+:root[data-theme="linen"] .progress__fill {
+  background: var(--color-primary);
+}
+
+/* ─── Glass Dark overrides ─── */
+
+:root[data-theme="glass-dark"] .kp {
+  background:
+    radial-gradient(ellipse 60% 50% at 10% 80%, rgba(124, 58, 237, 0.28), transparent 60%),
+    radial-gradient(ellipse 50% 40% at 90% 20%, rgba(6, 182, 212, 0.18), transparent 60%),
+    radial-gradient(ellipse 35% 35% at 55% 50%, rgba(212, 122, 140, 0.12), transparent 60%),
+    var(--color-background);
+}
+
+:root[data-theme="glass-dark"] .kp__element {
+  background: var(--color-surface-container);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid var(--color-outline-variant);
+  box-shadow: var(--shadow-card);
+}
+
+
+:root[data-theme="glass-dark"] .kp__element-icon {
+  background: var(--color-primary-container);
+  color: var(--color-on-primary-container);
+  box-shadow: var(--shadow-glow);
+}
+:root[data-theme="glass-dark"] .kp__element:nth-child(3n+2) .kp__element-icon {
+  background: var(--color-secondary-container);
+  color: var(--color-on-secondary-container);
+  box-shadow: 0 0 60px 0 rgba(6,182,212,0.30);
+}
+:root[data-theme="glass-dark"] .kp__element:nth-child(3n+3) .kp__element-icon {
+  background: var(--color-tertiary-container);
+  color: var(--color-on-tertiary-container);
+  box-shadow: 0 0 60px 0 rgba(212,122,140,0.30);
+}
+
+:root[data-theme="glass-dark"] .progress__fill {
+  background: var(--color-accent-gradient);
+}

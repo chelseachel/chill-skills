@@ -1,0 +1,33 @@
+html, body {
+  width: 100vw;
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #000;
+}
+
+#app {
+  /* Canvas size is driven by URL query (?w=…&h=…) via main.tsx; defaults are
+   * 1920×1080 (16:9) — pass ?w=1440&h=1080 to render 4:3 instead. */
+  width: var(--cover-w, 1920px);
+  height: var(--cover-h, 1080px);
+  flex: 0 0 auto;
+  overflow: hidden;
+  transform-origin: center center;
+  /* --scale is set by JS; defaults to 1 so Playwright at the canvas size is unaffected */
+  transform: scale(var(--scale, 1));
+}
+
+* { box-sizing: border-box; }
+
+body {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+img, svg { display: block; }
