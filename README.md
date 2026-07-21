@@ -1,6 +1,6 @@
 # chill-skills
 
-Personal Codex skills for producing AI news videos and covers.
+Reusable AI news production skills for creating videos and covers.
 
 ## Included skills
 
@@ -24,4 +24,3 @@ cd ai-news-cover
 pnpm install
 pnpm build
 ```
-
