@@ -19,6 +19,39 @@ const PREVIEW_URL  = `http://localhost:${PREVIEW_PORT}`;
 
 type ServerHandle = { proc: ChildProcess; baseUrl: string };
 
+type EvidenceAsset = { asset: string };
+
+function evidenceAssets(player: unknown): EvidenceAsset[] {
+  const data = player as { extract?: { keypoints?: Array<{ evidenceOverlays?: EvidenceAsset[] }> } };
+  return data.extract?.keypoints?.flatMap((kp) => kp.evidenceOverlays ?? []) ?? [];
+}
+
+function safeAssetPath(asset: string): string {
+  if (!asset || path.isAbsolute(asset) || asset.split(/[\\/]+/).includes('..')) {
+    throw new Error(`record: unsafe evidence asset path "${asset}"`);
+  }
+  return asset;
+}
+
+async function stageEvidenceAssets(player: unknown, playerPath: string, destinations: string[]): Promise<string[]> {
+  const staged: string[] = [];
+  const root = path.dirname(playerPath);
+  for (const { asset } of evidenceAssets(player)) {
+    const relativeAsset = safeAssetPath(asset);
+    const source = path.resolve(root, relativeAsset);
+    await fs.access(source).catch(() => {
+      throw new Error(`record: evidence screenshot not found at ${source}`);
+    });
+    for (const destinationRoot of destinations) {
+      const destination = path.resolve(destinationRoot, relativeAsset);
+      await fs.mkdir(path.dirname(destination), { recursive: true });
+      await fs.copyFile(source, destination);
+      staged.push(destination);
+    }
+  }
+  return staged;
+}
+
 /** Race a promise against a timeout; resolves to null (with a warn) on timeout. */
 async function withTimeout<T>(p: Promise<T>, ms: number, label: string): Promise<T | null> {
   let timer: NodeJS.Timeout | undefined;
@@ -128,6 +161,7 @@ async function main(): Promise<void> {
   await fs.mkdir(publicDir, { recursive: true });
   await fs.copyFile(playerPath, stagedPath);
   await fs.copyFile(playerPath, distStagedPath).catch(() => {});
+  const stagedEvidence = await stageEvidenceAssets(playerJson, playerPath, [publicDir, path.join(SKILL_ROOT, 'dist-renderer')]);
 
   const server = await startVitePreview();
   console.log(`  vite preview ready at ${server.baseUrl}`);
@@ -175,6 +209,7 @@ async function main(): Promise<void> {
     stopServer(server);
     await fs.rm(stagedPath, { force: true });
     await fs.rm(distStagedPath, { force: true });
+    await Promise.all(stagedEvidence.map((asset) => fs.rm(asset, { force: true })));
   }
 }
 

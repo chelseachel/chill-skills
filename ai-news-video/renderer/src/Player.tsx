@@ -25,6 +25,7 @@ export function Player({ data }: { data: PlayerData }): JSX.Element {
   const [activeIndex, setActiveIndex] = useState(-1); // -1 = not started
   const [exitingIndex, setExitingIndex] = useState(-1);
   const [progressPct, setProgressPct] = useState(0);
+  const [playheadSec, setPlayheadSec] = useState(0);
   const startedRef = useRef(false);
   const rafRef = useRef(0);
 
@@ -76,6 +77,7 @@ export function Player({ data }: { data: PlayerData }): JSX.Element {
       const elapsed = performance.now() - startMs;
       const pct = Math.min(100, (elapsed / totalMs) * 100);
       setProgressPct(pct);
+      setPlayheadSec(Math.min(timeline.totalSec, elapsed / 1000));
       if (pct < 100) rafRef.current = requestAnimationFrame(tick);
     };
     rafRef.current = requestAnimationFrame(tick);
@@ -114,9 +116,10 @@ export function Player({ data }: { data: PlayerData }): JSX.Element {
         const kpIdx = Number(slide.id.replace('kp-', ''));
         const kp = extract.keypoints[kpIdx];
         if (!kp) return null;
+        const cues = timeline.cues.filter((cue) => cue.slideId === slide.id);
         return (
           <div className={cls} key={slide.id} data-screen-label={`${String(i + 1).padStart(2, '0')} ${slide.id}`}>
-            <KeyPoint kp={kp} index={kpIdx} total={extract.keypoints.length} />
+            <KeyPoint kp={kp} index={kpIdx} total={extract.keypoints.length} cues={cues} playheadSec={playheadSec} />
           </div>
         );
       })}

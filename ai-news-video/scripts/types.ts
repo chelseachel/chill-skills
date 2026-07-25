@@ -7,11 +7,28 @@ export type KeypointElement = {
   brief: string;
 };
 
+export type EvidenceOverlay = {
+  /** Screenshot path relative to keypoints.json, for example evidence/kp-0-openai-x.png */
+  asset: string;
+  /** Short visible attribution, for example OpenAI @OpenAI · X */
+  sourceLabel: string;
+  /** Original post, announcement, paper, or release URL retained for auditability. */
+  sourceUrl: string;
+  /** What the screenshot corroborates; shown below the source label. */
+  caption: string;
+  /** 1-based sentence number within this keypoint at which the overlay appears. */
+  showFromSentence: number;
+  /** 1-based sentence number within this keypoint through which the overlay remains visible. */
+  showThroughSentence: number;
+};
+
 export type Keypoint = {
   /** Source article title (### heading from MD), kept verbatim */
   sourceTitle: string;
   /** 3-6 elements, derived from the article's bullet list */
   elements: KeypointElement[];
+  /** Optional first-hand evidence screenshots, shown over the card without changing its layout. */
+  evidenceOverlays?: EvidenceOverlay[];
 };
 
 export type ExtractResult = {

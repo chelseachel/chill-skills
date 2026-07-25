@@ -69,18 +69,32 @@ doctor 一次只报第一个失败：**解决一项就重跑确认下一项**。
 - icon 必须来自白名单
 - `sourceTitle` **14–24 字**完整新闻标题——主语+动词+关键数字/对象，**不要**写成 "X IPO"、"Y 调查" 这种关键词标签
 - `overview` 与 keypoints 顺序对齐的数组；每条 **10–18 字**，是 sourceTitle 的精炼版（保留主体+1 个关键数字或动作词），用作封面 chip 一行扫读
-- **`title` 是发布到 B 站的标题**（视频里不显示）：标题党风格但不能虚假，用口语化强钩子开头，再接具体事实支撑和可选第二爆点；统一以 `｜M.D AI 日报` 形式收尾，其中 `M.D` 是月.日占位符，必须替换成当天日期，如 `7.10`，绝不能字面写成 `M.D`。标题要像 `ChatGPT 学会抢话了！OpenAI 全双工语音上线，Grok 4.5 半价杀进 Cursor｜7.9 AI 日报` 或 `一天七连爆！DeepSeek 造芯、Meta 出图、Claude 上手机，AI 卷疯了｜7.8 AI 日报` 这种强钩子，而不是抽象概括。
+- **`title` 是发布到 B 站的标题**（视频里不显示）：写成“AI 圈战报”，不是资讯摘要。优先使用 **情绪判词 + 硬事实 + 戏剧化解读/悬念**：先用“危！”“一夜失控！”“大塌方！”“终于来了！”等抛出情绪，再塞模型名、公司、版本、参数、额度或发布日期等具体事实，最后用“是在憋大招？”“这回要麻烦了？”等圈内聊天式追问收住。当天有单点爆发就围绕一条写；没有绝对头条时，允许用 2–3 条事实写“连爆”式合集，不能硬凑单点。可使用“鸽王”“下凡”“偷吃额度”“练废了”等圈内黑话，但不得改写发布、取消、下架、价格、参数等实际状态；传闻必须带“传/疑/或/？”等不确定标记。统一以 `｜M.D AI 日报` 形式收尾，其中 `M.D` 是月.日占位符，必须替换成当天日期，如 `7.10`，绝不能字面写成 `M.D`。
 - **`coverTitle` 固定写 "今日 AI 资讯概览"**，用作视频封面 H1，不按天改
+
+### 一手信源截图浮层（可选）
+
+当 keypoint 有高价值的一手社区信号或官方页面时，可在原有卡片上叠加 1–2 张证据截图。截图不是独立幻灯片，也不改变卡片网格。
+
+社区一手信号只能作为对应新闻的证据层：`sourceTitle`、卡片内容和口播仍以该新闻本身为主，**不得**新建“社区资讯”keypoint、独立章节或单独口播段。
+
+- 只截原始帖子、官方公告、论文页、GitHub Release 或模型卡；不得截搜索结果、转述媒体或无关评论。
+- 截图须保留足以识别来源的账号/机构和关键原文；裁掉浏览器地址栏、个人通知和无关内容。
+- X 原帖截图必须展示发布者的原始语言，不得展示平台自动翻译、中文转述或“翻译自”界面。中文只可写在浮层的 `caption` 中；如果无法关闭翻译或核验原文，跳过该 X 截图。
+- 图片保存到 `<OUT_DIR>/evidence/`，并在对应 keypoint 的 `evidenceOverlays` 填入相对路径、来源标签、原始 URL、说明及触发的口播句号。完整 schema 见 `references/schemas.md`。
+- 每个 keypoint 最多 2 张截图；不同截图的句子范围不得重叠。没有可靠一手截图时省略该字段，不得为填充画面使用二手截图。
 
 写入 `<OUT_DIR>/keypoints.json`，按 schemas.md 的"校验自检清单"过一遍。
 
-**强制验证**：写完后必须用脚本解析 JSON，并检查视频画面用字段（`title`、`overview`、`sourceTitle`、`brief`、`coverHook` 如存在）没有中文直接贴英文/数字的混排错误；中文与英文/数字之间要有空格。该检查未通过不得进入 pipeline。
+**强制验证**：写完后必须用脚本解析 JSON，并检查视频画面用字段（`title`、`overview`、`sourceTitle`、`brief`、`coverHook` 如存在）没有中文直接贴英文/数字的混排错误；中文与英文/数字之间要有空格。存在 `evidenceOverlays` 时，还要检查相对图片路径存在、来源 URL 指向原始信源、来源标签与截图可见归属一致。该检查未通过不得进入 pipeline。
 
 ---
 
 ## Step 4 · 写 `script.json`
 
 完整 schema + 示例见 [references/schemas.md](./references/schemas.md)；语气、长度配比、段落过渡见 [references/extraction-guide.md](./references/extraction-guide.md)。
+
+`script.json` 是视频的**逐句口播稿**，也是 TTS 的唯一文本来源，不是编辑批注、解读提纲或给观众的操作建议。它只能自然说出来源已证实的事实，以及明确归因的影响说明；不得出现“解读时要看……”“团队应……”“不能只看……”等指导性或验收性措辞。
 
 要点：
 - 总字数 ≤ 750（≈ 3 分 45 秒）
@@ -95,6 +109,23 @@ doctor 一次只报第一个失败：**解决一项就重跑确认下一项**。
 - **严格控制总长度**：写完后默数总汉字数，超过 750 字必须删减，优先缩短字数多的 kp 段落
 
 写入 `<OUT_DIR>/script.json`。
+
+若本期使用截图浮层，此时回填 `keypoints.json` 的 `showFromSentence` 和 `showThroughSentence`：按对应 `kp-N` 内的最终句序从 1 计数。改动口播句序后必须一并复核这些范围。
+
+### Step 4.5 · 截取一手证据图（仅选中的 keypoint）
+
+为要进入视频的社区一手信号创建 `<OUT_DIR>/evidence-manifest.json`，schema 见 [references/schemas.md](./references/schemas.md)。每项对应已有 `kp-N`，不新建任何视频内容。
+
+```bash
+tsx <SKILL_DIR>/scripts/capture-evidence.ts \
+  --keypoints <OUT_DIR>/keypoints.json \
+  --manifest  <OUT_DIR>/evidence-manifest.json \
+  --out-dir   <OUT_DIR>/evidence
+```
+
+脚本只访问公开的 HTTP(S) 原始页面，截取页面内容而非浏览器界面，并回填同一 keypoint 的 `evidenceOverlays`。默认截取唯一的 `main` 区域；只有能准确定位原帖且选择器唯一时才填写 `selector`。对于 X 原帖，截图必须是作者原始语言，而非平台自动翻译；若无法获得原文、页面被登录墙遮挡、截图不是原帖/原始页面、文字无法辨识或包含无关隐私信息，删除该候选，不要以搜索结果或二手转述替代。
+
+运行后重新解析 `keypoints.json`，确认截图数量、来源 URL 和句子范围正确，再进入 pipeline。
 
 ---
 
@@ -126,7 +157,8 @@ tsx <SKILL_DIR>/scripts/run-pipeline.ts \
 2. 抽取封面段和每个 keypoint 章节开始后 1–2 秒的帧，拼成 contact sheet。
 3. 视觉检查 contact sheet：日期是本期日期；封面和每张卡片内容与 `keypoints.json` / `timeline.chapters` 对应；不是上一期旧内容；文字没有明显溢出、重叠、裁切。
 4. 如果画面显示旧内容，先检查 `<SKILL_DIR>/dist-renderer/player.json` 是否还是上一期数据；把 `OUT/player.json` 复制到该路径后，从 `--start-from record` 重录。
-5. 验证失败时不得交付为可发布成片，更不得执行任何上传/投稿命令。先定位原因，修复 `keypoints.json`、`script.json`、`player.json`、录制脚本或封面/元数据，再从对应步骤续跑并重新验证；全部通过后再继续交付或投稿。
+5. 若有 `evidenceOverlays`，在每个截图触发句期间额外抽帧：确认截图是当期素材、来源标签和说明正确、浮层没有遮住标题或进度条、卡片网格没有重排；X 原帖必须显示作者原始语言，而非自动翻译。
+6. 验证失败时不得交付为可发布成片，更不得执行任何上传/投稿命令。先定位原因，修复 `keypoints.json`、`script.json`、`player.json`、录制脚本或封面/元数据，再从对应步骤续跑并重新验证；全部通过后再继续交付或投稿。
 
 推荐抽帧方式：
 

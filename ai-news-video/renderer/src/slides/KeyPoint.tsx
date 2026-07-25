@@ -1,6 +1,6 @@
 import React from 'react';
 import * as Icons from 'lucide-react';
-import type { Keypoint } from '../types';
+import type { Cue, EvidenceOverlay, Keypoint } from '../types';
 import './KeyPoint.css';
 
 const FALLBACK_ICON = 'Sparkles';
@@ -21,12 +21,21 @@ export function KeyPoint({
   kp,
   index,
   total,
+  cues,
+  playheadSec,
 }: {
   kp: Keypoint;
   index: number;
   total: number;
+  cues: Cue[];
+  playheadSec: number;
 }): JSX.Element {
   const layout = gridLayoutFor(kp.elements.length);
+  const activeEvidence = (kp.evidenceOverlays ?? []).find((overlay) => {
+    const start = cues[overlay.showFromSentence - 1];
+    const end = cues[overlay.showThroughSentence - 1];
+    return Boolean(start && end && playheadSec >= start.startSec && playheadSec < end.startSec + end.durSec);
+  });
 
   return (
     <section className="kp" data-cols={layout.cols} data-rows={layout.rows}>
@@ -58,6 +67,18 @@ export function KeyPoint({
           })}
         </ul>
       </div>
+      {activeEvidence ? <EvidenceOverlayCard evidence={activeEvidence} /> : null}
     </section>
+  );
+}
+
+function EvidenceOverlayCard({ evidence }: { evidence: EvidenceOverlay }): JSX.Element {
+  return (
+    <aside className="evidence-overlay" aria-label={evidence.sourceLabel}>
+      <img className="evidence-overlay__image" src={`/${evidence.asset}`} alt="" />
+      <div className="evidence-overlay__meta">
+        <div className="evidence-overlay__source">{evidence.sourceLabel}</div>
+      </div>
+    </aside>
   );
 }

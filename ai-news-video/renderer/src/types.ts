@@ -4,9 +4,19 @@ export type KeypointElement = {
   brief: string;
 };
 
+export type EvidenceOverlay = {
+  asset: string;
+  sourceLabel: string;
+  sourceUrl: string;
+  caption: string;
+  showFromSentence: number;
+  showThroughSentence: number;
+};
+
 export type Keypoint = {
   sourceTitle: string;
   elements: KeypointElement[];
+  evidenceOverlays?: EvidenceOverlay[];
 };
 
 export type ExtractResult = {

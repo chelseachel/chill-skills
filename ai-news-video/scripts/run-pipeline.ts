@@ -80,6 +80,12 @@ function run(cmd: string, args: string[], cwd?: string): Promise<void> {
   });
 }
 
+// Invoke bundled tools directly. This avoids nested workspace resolution when
+// the skill is run from a Codex workspace that has its own pnpm configuration.
+function runLocal(bin: string, args: string[]): Promise<void> {
+  return run(path.join(SKILL_ROOT, 'node_modules', '.bin', bin), args, SKILL_ROOT);
+}
+
 const STEPS = ['tokens', 'tts', 'merge', 'record', 'compose'] as const;
 type Step = typeof STEPS[number];
 
@@ -106,13 +112,13 @@ async function main(): Promise<void> {
 
   if (wantsStep('tokens')) {
     console.log('\n▸ [1/5] Build theme tokens');
-    await run('pnpm', ['run', 'build:tokens'], SKILL_ROOT);
+    await runLocal('tsx', ['renderer/src/themes/build-tokens.ts']);
   }
 
   const timelinePath = path.join(args.out, 'timeline.json');
   if (wantsStep('tts')) {
     console.log(`\n▸ [2/5] TTS via ${args.ttsProvider} provider`);
-    await run('tsx', [
+    await runLocal('tsx', [
       path.join(SKILL_ROOT, 'scripts/tts.ts'),
       '--script', scriptPath,
       '--audio-dir', path.join(args.out, 'audio'),
@@ -126,7 +132,7 @@ async function main(): Promise<void> {
   const playerPath = path.join(args.out, 'player.json');
   if (wantsStep('merge')) {
     console.log('\n▸ [3/5] Merge keypoints + timeline → player.json');
-    await run('tsx', [
+    await runLocal('tsx', [
       path.join(SKILL_ROOT, 'scripts/merge-player.ts'),
       '--extract',  keypointsPath,
       '--timeline', timelinePath,
@@ -138,11 +144,12 @@ async function main(): Promise<void> {
   if (wantsStep('record')) {
     // record.ts serves `dist-renderer` via `vite preview`, so the renderer must
     // be (re)built first — otherwise edits to renderer/src (CSS, components) are
-    // silently ignored and the recording uses a stale build. `pnpm run build`
-    // also refreshes theme tokens, so this is safe even with --start-from record.
+    // silently ignored and the recording uses a stale build. Refreshing tokens
+    // before the Vite build keeps this safe even with --start-from record.
     console.log('\n▸ [4/5] Build renderer (dist-renderer) + record silent.webm');
-    await run('pnpm', ['run', 'build'], SKILL_ROOT);
-    await run('tsx', [
+    await runLocal('tsx', ['renderer/src/themes/build-tokens.ts']);
+    await runLocal('vite', ['build']);
+    await runLocal('tsx', [
       path.join(SKILL_ROOT, 'scripts/record.ts'),
       '--player', playerPath,
       '--out',    silentPath,
@@ -153,7 +160,7 @@ async function main(): Promise<void> {
   const finalPath = path.join(args.out, 'final.mp4');
   if (wantsStep('compose')) {
     console.log('\n▸ [5/5] Compose final.mp4 via ffmpeg');
-    await run('tsx', [
+    await runLocal('tsx', [
       path.join(SKILL_ROOT, 'scripts/compose.ts'),
       '--silent',    silentPath,
       '--audio-dir', path.join(args.out, 'audio'),
