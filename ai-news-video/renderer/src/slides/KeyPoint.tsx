@@ -4,6 +4,7 @@ import type { Cue, EvidenceOverlay, Keypoint } from '../types';
 import './KeyPoint.css';
 
 const FALLBACK_ICON = 'Sparkles';
+const EVIDENCE_EXIT_SEC = 0.26;
 
 function pickIcon(name: string): React.ComponentType<{ size?: number; strokeWidth?: number; color?: string }> {
   const lib = Icons as unknown as Record<string, React.ComponentType<{ size?: number; strokeWidth?: number; color?: string }>>;
@@ -31,11 +32,7 @@ export function KeyPoint({
   playheadSec: number;
 }): JSX.Element {
   const layout = gridLayoutFor(kp.elements.length);
-  const activeEvidence = (kp.evidenceOverlays ?? []).find((overlay) => {
-    const start = cues[overlay.showFromSentence - 1];
-    const end = cues[overlay.showThroughSentence - 1];
-    return Boolean(start && end && playheadSec >= start.startSec && playheadSec < end.startSec + end.durSec);
-  });
+  const evidenceOverlays = kp.evidenceOverlays ?? [];
 
   return (
     <section className="kp" data-cols={layout.cols} data-rows={layout.rows}>
@@ -67,14 +64,37 @@ export function KeyPoint({
           })}
         </ul>
       </div>
-      {activeEvidence ? <EvidenceOverlayCard evidence={activeEvidence} /> : null}
+      {evidenceOverlays.map((evidence) => {
+        const start = cues[evidence.showFromSentence - 1];
+        const end = cues[evidence.showThroughSentence - 1];
+        const endSec = end ? end.startSec + end.durSec : 0;
+        // Start the fade before the cue ends so it remains visible even when
+        // the evidence and its parent slide finish at the same boundary.
+        const exitStartSec = Math.max(start?.startSec ?? 0, endSec - EVIDENCE_EXIT_SEC);
+        const state = !start || !end || playheadSec < start.startSec
+          ? 'waiting'
+          : playheadSec < exitStartSec
+            ? 'visible'
+            : 'exiting';
+        return <EvidenceOverlayCard key={evidence.asset} evidence={evidence} state={state} />;
+      })}
     </section>
   );
 }
 
-function EvidenceOverlayCard({ evidence }: { evidence: EvidenceOverlay }): JSX.Element {
+function EvidenceOverlayCard({
+  evidence,
+  state,
+}: {
+  evidence: EvidenceOverlay;
+  state: 'waiting' | 'visible' | 'exiting';
+}): JSX.Element {
   return (
-    <aside className="evidence-overlay" aria-label={evidence.sourceLabel}>
+    <aside
+      className={`evidence-overlay is-${state}`}
+      aria-label={evidence.sourceLabel}
+      aria-hidden={state !== 'visible'}
+    >
       <img className="evidence-overlay__image" src={`/${evidence.asset}`} alt="" />
       <div className="evidence-overlay__meta">
         <div className="evidence-overlay__source">{evidence.sourceLabel}</div>
