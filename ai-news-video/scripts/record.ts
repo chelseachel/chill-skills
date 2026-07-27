@@ -161,6 +161,14 @@ async function main(): Promise<void> {
   await fs.mkdir(publicDir, { recursive: true });
   await fs.copyFile(playerPath, stagedPath);
   await fs.copyFile(playerPath, distStagedPath).catch(() => {});
+  const [sourcePlayer, distPlayer] = await Promise.all([
+    fs.readFile(playerPath),
+    fs.readFile(distStagedPath),
+  ]);
+  if (!sourcePlayer.equals(distPlayer)) {
+    throw new Error('record: dist-renderer/player.json does not match the requested player.json');
+  }
+  console.log('  ✓ staged player.json matches dist-renderer/player.json');
   const stagedEvidence = await stageEvidenceAssets(playerJson, playerPath, [publicDir, path.join(SKILL_ROOT, 'dist-renderer')]);
 
   const server = await startVitePreview();

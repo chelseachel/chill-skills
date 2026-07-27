@@ -50,6 +50,15 @@ async function capturePage(page: Page, capture: Capture, targetPath: string): Pr
   await page.goto(capture.sourceUrl, { waitUntil: 'domcontentloaded', timeout: 30000 });
   await page.waitForTimeout(Math.min(Math.max(capture.settleMs ?? 1400, 0), 10000));
 
+  for (const label of ['Reject optional cookies', 'Accept all cookies']) {
+    const consentButton = page.getByRole('button', { name: label, exact: true });
+    if (await consentButton.count() === 1 && await consentButton.isVisible()) {
+      await consentButton.click();
+      await page.waitForTimeout(300);
+      break;
+    }
+  }
+
   for (const selector of screenshotSelectors(capture.selector)) {
     const locator = page.locator(selector);
     if (await locator.count() !== 1) continue;
