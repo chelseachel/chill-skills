@@ -11,7 +11,7 @@ function buildFallbackChapters(data: PlayerData): Chapter[] {
     cursor += slide.durSec;
 
     if (slide.id === 'cover') {
-      return { slideId: slide.id, title: '本期概要', startSec, durSec: slide.durSec };
+      return { slideId: slide.id, title: '概览', startSec, durSec: slide.durSec }
     }
 
     const kpIdx = Number(slide.id.replace('kp-', ''));

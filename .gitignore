@@ -4,5 +4,6 @@
 **/dist-renderer/
 **/.vite/
 **/coverage/
+ai-news-video/renderer/public/evidence/
 *.log
 

@@ -15,6 +15,8 @@ type KeypointElement = {
   brief: string;      // 20–60 个中文汉字量级。忠于原文，一句话讲清楚这个元素。
                       // 只承载可核验事实：主体、动作、数字、范围、机制、受影响对象、官方/报道表述。
                       // 不把"为什么重要/今日洞察"里的判断改写成卡片事实。
+                      // 只写已经知道的事实，不把"截至截稿/采集时"、"未披露/未公布"、
+                      // "没有给出"、"尚待确认"或未知字段清单写成 element。
                       // 英文模型名、公司名、代码、漏洞编号、数字和单位不按字母逐个计数；
                       // 为保留关键专名或数字可略超，但不应把卡片撑成段落。
 };
@@ -35,7 +37,7 @@ type EvidenceOverlay = {
   asset: string;                // 相对 keypoints.json 的图片路径；仅 .jpg/.jpeg/.png/.webp，例如 evidence/kp-0-openai-x.png
   sourceLabel: string;          // 画面归属，如 "OpenAI @OpenAI · X" 或 "Qwen 官方 GitHub"
   sourceUrl: string;            // 原始帖子、公告、论文、Release 或模型卡 URL，供审计，不在画面中显示
-  caption: string;              // 8–28 字，说明截图佐证的事实；不添加新判断。X 原帖的中文解释只写在此处，截图本身保留原文
+  caption: string;              // 8–28 字，说明截图佐证的事实；不添加新判断，只补充截图未覆盖的背景
   showFromSentence: number;     // 对应 kp-N 的第几句口播开始展示，1 起算
   showThroughSentence: number;  // 展示到对应 kp-N 的第几句结束，含本句；不得与同条其他截图范围重叠
 };
@@ -49,7 +51,7 @@ type ExtractResult = {
                         //   其中 M.D 必须替换为当天月.日，例如：
                         //   `危！DeepSeek V4 正式版深陷时空裂缝！鸽王登基还是正在憋终极核技？｜7.20 AI 日报`
                         //   `AI 圈一夜失控！Fable 5 下架、Codex 限额清零、Grok 2T 开始苏醒？｜7.18 AI 日报`
-  coverTitle: string;   // **视频封面 H1**，固定写 "今日 AI 资讯概览"，不要按天改
+  coverTitle: string;   // **视频封面 H1**，固定写 "今日 AI 资讯"，不要按天改
   date: string;         // 日期，从原文或文件名提取（中英文写法均可）
   overview: string[];   // 封面概览，每条 **10–18 汉字**。同 sourceTitle 顺序对齐，但措辞可独立。
                         // 比 sourceTitle 稍短的"精炼版"——必须含主体 + 1 个关键数字或动作词，
@@ -71,7 +73,7 @@ type ExtractResult = {
 ```json
 {
   "title": "AI 圈大地震！GPT-5 推理快 3 倍、价格砍 6 成，开发者要起飞了？｜5.10 AI 日报",
-  "coverTitle": "今日 AI 资讯概览",
+  "coverTitle": "今日 AI 资讯",
   "date": "2026-05-10",
   "overview": [
     "GPT-5 正式发布，推理快 3 倍",
@@ -187,7 +189,7 @@ type Script = {
 ```typescript
 type Chapter = {
   slideId: 'cover' | `kp-${number}`;
-  title: string;     // cover 固定为 "本期概要"，kp-N 使用 overview[N]
+  title: string;     // cover 固定为 "概览"，kp-N 使用 overview[N]
   startSec: number;  // seconds from video start
   durSec: number;    // chapter duration in seconds
 };
@@ -233,19 +235,21 @@ Target  Calendar  Clock  Flag  Star  Crown  Gem
 - [ ] `title` 是“情绪判词 + 硬事实 + 戏剧化解读/悬念”的战报式标题；可写单点爆发，也可串联 2–3 条强新闻做连爆叙事，不写成平铺资讯摘要
 - [ ] `title` 至少含一个可核验的模型、公司、版本、数字、额度或明确状态；情绪和黑话可以夸张，但不得篡改发布、取消、下架、价格、参数等事实，传闻须标明不确定性
 - [ ] `title` 以当天月.日形式收尾，如 `｜7.10 AI 日报`，不写成字面 `M.D`；最好不超过 40 汉字
-- [ ] `coverTitle` 等于固定字符串 "今日 AI 资讯概览"
+- [ ] `coverTitle` 等于固定字符串 "今日 AI 资讯"
 - [ ] `keypoints.length` 在 2–8 之间
 - [ ] 每个 `keypoint.elements.length` 在 3–8 之间
 - [ ] 每个 `subtitle` 是 2–6 个汉字（不是英文短语）
 - [ ] 每个 `brief` 是 20–60 个中文汉字量级（按中文阅读密度估算；英文/数字/代码不逐字母计数，可为保留关键事实略超）
 - [ ] `brief` 含具体事实、数字、对象或机制，避免只写"引发关注/影响深远/值得警惕"这类空泛判断
+- [ ] `subtitle` / `brief` 没有用“截至截稿/采集时”“未披露/未公布”“没有给出”“尚待确认”或未知字段清单充当 element；每格都回答“已经知道了什么”
 - [ ] `brief` 没有把分析当事实：避免"这说明/这意味着/将会影响/相互连接/成为趋势"等主观连接句；这类内容应放入口播或洞察
 - [ ] `brief` 优先来自日报"关键细节"，而不是"为什么重要"或"今日关键洞察"
 - [ ] 所有 `icon` 都在白名单里
 - [ ] 每个 `sourceTitle` 在 14–24 字，含主语+动词+关键数字/对象（不是关键词标签）
 - [ ] 每条 `overview` 在 10–18 字，含主体+1 个关键数字或动作词（不是名词堆叠）
 - [ ] `overview.length === keypoints.length`，且按顺序对齐
-- [ ] `evidenceOverlays` 只用于原始帖子、官方公告、论文页、GitHub Release 或模型卡；每个 keypoint 最多 2 张，截图不包含浏览器隐私信息或无关评论；X 原帖必须显示发布者原始语言，不得使用平台自动翻译
+- [ ] `evidenceOverlays` 只用于原始帖子、官方公告、论文页、GitHub Release 或模型卡；每个 keypoint 最多 2 张，截图不包含浏览器隐私信息或无关评论
+- [ ] 每张证据截图尽量接近浮层图片区 `4:3` 比例，有效内容同时撑满宽高且没有可消除的大块留白；图片未拉伸变形，来源身份与关键原文未被裁掉
 - [ ] 每张截图路径相对 `keypoints.json`，文件存在且扩展名为 `.jpg`、`.jpeg`、`.png` 或 `.webp`；`sourceUrl` 指向该截图的一手页面
 - [ ] `showFromSentence` / `showThroughSentence` 是对应 keypoint 内从 1 起算的有效句号，且同一 keypoint 的截图时间范围不重叠
 - [ ] `evidence-manifest.json` 只指向公开的一手页面；每项绑定已有 keypoint，不新建“社区资讯”keypoint、章节或口播段

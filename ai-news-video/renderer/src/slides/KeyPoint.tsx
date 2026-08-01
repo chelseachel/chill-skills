@@ -4,6 +4,7 @@ import type { Cue, EvidenceOverlay, Keypoint } from '../types';
 import './KeyPoint.css';
 
 const FALLBACK_ICON = 'Sparkles';
+const EVIDENCE_ENTRY_DELAY_SEC = 1.7;
 const EVIDENCE_EXIT_SEC = 0.26;
 
 function pickIcon(name: string): React.ComponentType<{ size?: number; strokeWidth?: number; color?: string }> {
@@ -67,11 +68,12 @@ export function KeyPoint({
       {evidenceOverlays.map((evidence) => {
         const start = cues[evidence.showFromSentence - 1];
         const end = cues[evidence.showThroughSentence - 1];
+        const visibleStartSec = (start?.startSec ?? 0) + EVIDENCE_ENTRY_DELAY_SEC;
         const endSec = end ? end.startSec + end.durSec : 0;
         // Start the fade before the cue ends so it remains visible even when
         // the evidence and its parent slide finish at the same boundary.
-        const exitStartSec = Math.max(start?.startSec ?? 0, endSec - EVIDENCE_EXIT_SEC);
-        const state = !start || !end || playheadSec < start.startSec
+        const exitStartSec = Math.max(visibleStartSec, endSec - EVIDENCE_EXIT_SEC);
+        const state = !start || !end || playheadSec < visibleStartSec
           ? 'waiting'
           : playheadSec < exitStartSec
             ? 'visible'

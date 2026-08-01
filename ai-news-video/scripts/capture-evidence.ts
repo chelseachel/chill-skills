@@ -50,7 +50,14 @@ async function capturePage(page: Page, capture: Capture, targetPath: string): Pr
   await page.goto(capture.sourceUrl, { waitUntil: 'domcontentloaded', timeout: 30000 });
   await page.waitForTimeout(Math.min(Math.max(capture.settleMs ?? 1400, 0), 10000));
 
-  for (const label of ['Reject optional cookies', 'Accept all cookies']) {
+  for (const label of [
+    '拒绝非必要 Cookie',
+    '拒绝可选 Cookie',
+    '接受所有 Cookie',
+    'Reject optional cookies',
+    'Refuse non-essential cookies',
+    'Accept all cookies',
+  ]) {
     const consentButton = page.getByRole('button', { name: label, exact: true });
     if (await consentButton.count() === 1 && await consentButton.isVisible()) {
       await consentButton.click();
@@ -110,12 +117,10 @@ async function main(): Promise<void> {
   const overlaysByKeypoint = new Map<number, EvidenceOverlay[]>();
   const browser = await chromium.launch({ headless: true });
   try {
-    // Keep source pages in their original-language presentation. X screenshots
-    // must never use the platform's automatic translated-post UI.
     const page = await browser.newPage({
       viewport: { width: 1280, height: 960 },
       deviceScaleFactor: 1,
-      locale: 'en-US',
+      locale: 'zh-CN',
     });
     for (const [index, capture] of manifest.captures.entries()) {
       validateCapture(capture, extract, index);

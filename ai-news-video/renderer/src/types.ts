@@ -21,7 +21,7 @@ export type Keypoint = {
 
 export type ExtractResult = {
   title: string;        // B 站发布的标题党标题（封面不显示）
-  coverTitle: string;   // 视频封面 H1，固定为 "今日 AI 资讯概览"
+  coverTitle: string;   // 视频封面 H1，固定为 "今日 AI 资讯"
   date: string;
   overview: string[];
   keypoints: Keypoint[];
