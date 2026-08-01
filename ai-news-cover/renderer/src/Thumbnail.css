@@ -100,7 +100,9 @@
    The focal keyword carries the single accent, so the standalone underline is
    dropped whenever a keyword is present (see the fallback rule below). */
 .cover__hook-hl {
+  display: inline-block;
   color: var(--color-on-surface);
+  white-space: nowrap;
   background-image: linear-gradient(
     to top,
     color-mix(in srgb, var(--cover-accent) 32%, transparent) 0,
