@@ -171,7 +171,7 @@
 
 /* 左列：右侧留间距 */
 :root[data-theme="linen"] .cover__overview:has(.cover__chip:nth-child(5)) .cover__chip:nth-child(odd) {
-  padding-right: var(--space-xxl);
+  padding-right: var(--space-xl);
 }
 
 /* 右列：左侧留间距 */
