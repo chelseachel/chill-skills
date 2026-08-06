@@ -24,7 +24,7 @@ function resolveTheme(): ThemeId {
   const url = new URL(window.location.href);
   const t = url.searchParams.get('theme');
   if (t && (ALL_THEME_IDS as readonly string[]).includes(t)) return t as ThemeId;
-  return ALL_THEME_IDS[0];
+  return ALL_THEME_IDS[1]
 }
 
 function applyScale(): void {
