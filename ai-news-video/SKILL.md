@@ -83,6 +83,7 @@ doctor 一次只报第一个失败：**解决一项就重跑确认下一项**。
 - 截图须保留足以识别来源的账号/机构和关键原文；裁掉浏览器地址栏、个人通知和无关内容。
 - 截图应尽量按浮层图片区的 `4:3` 比例裁切，让有效内容同时撑满宽度和高度，避免可消除的大块上下或左右留白。优先调整精确 `selector` 或在捕获后裁图；不得拉伸变形，也不得为填满区域裁掉来源身份或关键原文。
 - 图片保存到 `<OUT_DIR>/evidence/`，并在对应 keypoint 的 `evidenceOverlays` 填入相对路径、来源标签、原始 URL、说明及触发的口播句号。完整 schema 见 `references/schemas.md`。
+- **展示时长**：每张截图通过 `showFromSentence` / `showThroughSentence` 绑定 1–2 句口播。
 - 每个 keypoint 最多 2 张截图；不同截图的句子范围不得重叠。没有可靠一手截图时省略该字段，不得为填充画面使用二手截图。
 
 写入 `<OUT_DIR>/keypoints.json`，按 schemas.md 的"校验自检清单"过一遍。
@@ -111,7 +112,7 @@ doctor 一次只报第一个失败：**解决一项就重跑确认下一项**。
 
 写入 `<OUT_DIR>/script.json`。
 
-若本期使用截图浮层，此时回填 `keypoints.json` 的 `showFromSentence` 和 `showThroughSentence`：按对应 `kp-N` 内的最终句序从 1 计数。改动口播句序后必须一并复核这些范围。
+若本期使用截图浮层，此时回填 `keypoints.json` 的 `showFromSentence` 和 `showThroughSentence`：按对应 `kp-N` 内的最终句序从 1 计数。每张截图展示 1–2 句。改动口播句序后必须一并复核这些范围。
 
 ### Step 4.5 · 截取一手证据图（仅选中的 keypoint）
 

@@ -39,7 +39,7 @@ type EvidenceOverlay = {
   sourceUrl: string;            // 原始帖子、公告、论文、Release 或模型卡 URL，供审计，不在画面中显示
   caption: string;              // 8–28 字，说明截图佐证的事实；不添加新判断，只补充截图未覆盖的背景
   showFromSentence: number;     // 对应 kp-N 的第几句口播开始展示，1 起算
-  showThroughSentence: number;  // 展示到对应 kp-N 的第几句结束，含本句；不得与同条其他截图范围重叠
+  showThroughSentence: number;  // 展示到对应 kp-N 的第几句结束，含本句；与 showFromSentence 的跨度为 1–2 句；不得与同条其他截图范围重叠
 };
 
 type ExtractResult = {
@@ -251,7 +251,7 @@ Target  Calendar  Clock  Flag  Star  Crown  Gem
 - [ ] `evidenceOverlays` 只用于原始帖子、官方公告、论文页、GitHub Release 或模型卡；每个 keypoint 最多 2 张，截图不包含浏览器隐私信息或无关评论
 - [ ] 每张证据截图尽量接近浮层图片区 `4:3` 比例，有效内容同时撑满宽高且没有可消除的大块留白；图片未拉伸变形，来源身份与关键原文未被裁掉
 - [ ] 每张截图路径相对 `keypoints.json`，文件存在且扩展名为 `.jpg`、`.jpeg`、`.png` 或 `.webp`；`sourceUrl` 指向该截图的一手页面
-- [ ] `showFromSentence` / `showThroughSentence` 是对应 keypoint 内从 1 起算的有效句号，且同一 keypoint 的截图时间范围不重叠
+- [ ] `showFromSentence` / `showThroughSentence` 是对应 keypoint 内从 1 起算的有效句号，每张截图跨度 1–2 句，且同一 keypoint 的截图时间范围不重叠
 - [ ] `evidence-manifest.json` 只指向公开的一手页面；每项绑定已有 keypoint，不新建“社区资讯”keypoint、章节或口播段
 - [ ] `script.sentences` 里每句 ≤50 字、以 。?! 结尾（停顿标记 `<#x#>` 不计入字数）
 - [ ] `script.json` 是最终逐句口播稿，而非编辑批注或观众指导；不得含“解读时要看”“团队应”“不能只看”等指导性话术
